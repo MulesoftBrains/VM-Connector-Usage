@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6240d0c1-0842-4920-9c8b-58baf5204c72" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<vm:config name="VM_Config" doc:name="VM Config" doc:id="3fedc26d-7f03-437b-8c8f-e82b7f9e37fe" >
+		<vm:queues >
+			<vm:queue queueName="Queue1" />
+			<vm:queue queueName="Queue2" />
+		</vm:queues>
+	</vm:config>
+	<flow name="vm-connector-usageFlow" doc:id="c4fb52e5-e6fd-4aa3-a549-6cde9af3feef" >
+		<http:listener doc:name="Listener" doc:id="7d457720-0bda-4058-b472-41b6e6f7f222" config-ref="HTTP_Listener_config" path="/publish"/>
+		<logger level="INFO" doc:name="Received payload" doc:id="a44a6140-1c54-4327-b7f3-2257a19cd2a5" message='#["Initial payload received at logger 1" ++ payload]'/>
+		<vm:publish doc:name="Publish" doc:id="b405acf8-7b7b-4236-abce-ff15a056f8a5" config-ref="VM_Config" queueName="Queue1"/>
+		<logger level="INFO" doc:name="End Logger" doc:id="4dcc1565-5d31-495c-8e6e-6eeeb7e4b0f9" message='#["End payload received at logger 3" ++ payload]'/>
+	</flow>
+	<flow name="vm-connector-usageFlow1" doc:id="a3bcbbbb-5b1a-457a-9422-c10fc0093284" >
+		<vm:listener queueName="Queue1" doc:name="Listener" doc:id="a276e93d-2e18-4cef-ac39-62565504a9cb" config-ref="VM_Config"/>
+		<logger level="INFO" doc:name="received payload on Queue1" doc:id="cf7e4496-a0b1-4482-a6bb-a48a0e792f72" message='#["Payload received at logger 2" ++ payload]'/>
+	</flow>
+</mule>

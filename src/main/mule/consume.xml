@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+	<flow name="consumeFlow" doc:id="d21cf28b-6993-4932-9242-9ccb73c6ffd3" >
+		<http:listener doc:name="Listener" doc:id="fac0501a-f6d3-4b01-bd15-207d7e39facb" config-ref="HTTP_Listener_config" path="/publishToQueue2"/>
+		<vm:publish doc:name="Publish" doc:id="3cb1bf4d-ed70-4886-9fa1-8ee39dc361a3" config-ref="VM_Config" queueName="Queue2"/>
+	</flow>
+	<flow name="consumeFlow1" doc:id="e53e6cc0-f67f-4509-99e6-f780d3704085" >
+		<http:listener doc:name="Listener" doc:id="8fd550a2-367a-44b7-bcbf-c1f9abc2dd1e" config-ref="HTTP_Listener_config" path="/consumeFromQueue2"/>
+		<vm:consume doc:name="Consume" doc:id="00cc2fb2-a2e0-4c2a-9c69-4ea0b3799d85" config-ref="VM_Config" queueName="Queue2"/>
+	</flow>
+</mule>
